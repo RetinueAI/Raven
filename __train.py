@@ -13,10 +13,13 @@ from __data import RavenDataSet
 from __raven import Raven 
 
 
+
+with open('config.txt', 'r') as f:
+    n_classes = int(f.readlines()[1])
+
 weights_dir = "weights"
 filename = "__raven.csv"
 maxlen = 512
-n_classes = 14
 batch_size = 4
 learning_rate = 3e-7
 epochs = 100

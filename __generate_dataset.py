@@ -112,6 +112,10 @@ while True:
 
 n_labels = len(df.labels.unique())
 
+with open('config.txt', 'w') as f:
+    f.write(f"Number of labels:\n")
+    f.write(f'{n_labels}')
+
 inputs = {}
 
 for i in range(n_labels):
