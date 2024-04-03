@@ -9,3 +9,4 @@ combine_dataset.py
 create_dataset.py
 raven.csv
 testing.ipynb
+*.csv
