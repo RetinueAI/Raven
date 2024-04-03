@@ -16,7 +16,7 @@ from __raven import Raven
 weights_dir = "weights"
 filename = "__raven.csv"
 maxlen = 512
-n_classes = 18
+n_classes = 14
 batch_size = 4
 learning_rate = 3e-7
 epochs = 100

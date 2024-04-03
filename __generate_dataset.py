@@ -5,7 +5,7 @@ import pandas as pd
 
 dfs = []
 
-for i in range(0, 18):
+for i in range(len(os.listdir('./data'))):
     with open(f'data/Raven Dataset Label {i}.csv', 'r') as f:
         lines = f.readlines()
 
@@ -22,7 +22,17 @@ for i in range(0, 18):
             data.append(line)
 
     df = pd.DataFrame(data, columns=['inputs'])
-    df['labels'] = [i for _ in range(len(df))]
+
+    label = 0
+    match i:
+        case 5|6|7:
+            label = 5
+        case 8|9|10|11|12|13|14|15:
+            label = i - 2
+        case _:
+            label = i
+
+    df['labels'] = [label for _ in range(len(df))]
     dfs.append(df)
 
 df = pd.concat(dfs, ignore_index=True)
@@ -100,7 +110,7 @@ while True:
     if n_shitty == 0:
         break
 
-n_labels = 18
+n_labels = len(df.labels.unique())
 
 inputs = {}
 
@@ -111,7 +121,7 @@ for index, row in df.iterrows():
     inputs[row['labels']].append(row['inputs'])
 
 n = min([len(inputs[i]) for i in range(len(inputs))])
-
+print(f'Number of entries from each label is: {n}')
 indexes = {}
 
 for i in range(n_labels):
