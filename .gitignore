@@ -4,7 +4,6 @@ __pycache__/
 raven_env/
 temp/
 wandb/
-raven.csv
 combine_dataset.py
 create_dataset.py
 raven.csv
