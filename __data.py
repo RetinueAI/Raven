@@ -16,13 +16,33 @@ from sklearn.model_selection import train_test_split
 import ast
 
 
+
+"""
+    Raven Dataset Module
+    
+    This module defines the `RavenDataSet` class, a custom PyTorch Dataset for loading and processing text data for token classification tasks using BERT.
+    
+    The `RavenDataSet` class handles:
+    - Loading data from a CSV file.
+    - Tokenizing text using the BERT tokenizer (`bert-base-multilingual-cased`).
+    - Aligning labels with tokenized inputs, ensuring special tokens ([CLS], [SEP], [PAD]) are labeled with -100.
+    - Splitting the data into training and test sets based on a specified ratio (default: 90% training, 10% testing).
+    
+    Classes:
+        RavenDataSet: A custom dataset class for token classification tasks.
+    
+    Usage:
+        - Initialize with parameters such as `filename`, `maxlen`, `n_classes`, and `split_type`.
+        - Use `__len__` to get the dataset size.
+        - Use `__getitem__` to retrieve processed samples (input_ids, attention_mask, labels).
+        - The `_align_labels_with_tokens` method ensures proper label alignment during tokenization.
+    """
 class RavenDataSet(Dataset):
     def __init__(self, filename, maxlen, n_classes, split_type='train', split_ratio=0.9):
         self.tokenizer = BertTokenizer.from_pretrained('bert-base-multilingual-cased')
         self.n_classes = n_classes
         df = pd.read_csv(filename)
         
-        # No need for splitting the text here
         train_df, test_df = train_test_split(df, test_size=1-split_ratio, random_state=42)
         self.df = train_df if split_type == 'train' else test_df
         self.df = self.df.reset_index(drop=True)
@@ -34,15 +54,12 @@ class RavenDataSet(Dataset):
     def __getitem__(self, idx):
         row = self.df.iloc[idx]
         text = row['inputs']
-        labels = ast.literal_eval(row['labels'])  # Assuming labels are stored as string representations of lists
+        labels = ast.literal_eval(row['labels'])
         
-        # Tokenize the text
         inputs = self.tokenizer(text, add_special_tokens=True, max_length=self.maxlen, padding='max_length', truncation=True, return_tensors='pt')
         input_ids = inputs['input_ids'].squeeze(0)
         attention_mask = inputs['attention_mask'].squeeze(0)
         
-        # Align labels with tokenized input IDs, assuming labels are at the character level and need conversion
-        # This part needs to be adjusted based on your actual label format and alignment strategy
         label_ids = self._align_labels_with_tokens(labels, input_ids)
         
         return {
@@ -52,28 +69,20 @@ class RavenDataSet(Dataset):
         }
     
     def _align_labels_with_tokens(self, labels, input_ids):
-        # Decode the input IDs to tokens
         tokens = self.tokenizer.convert_ids_to_tokens(input_ids)
         
-        # Initialize the list for the aligned labels with default value -100
-        # -100 is often used to ignore tokens during loss calculation in PyTorch
         aligned_labels = [-100] * len(tokens)
         
-        # Initialize variables to keep track of the position in the original labels list
         label_index = 0
         
         for i, token in enumerate(tokens):
-            # Skip special tokens added by BERT tokenizer ([CLS], [SEP], [PAD])
             if token in ["[CLS]", "[SEP]", "[PAD]"]:
                 continue
-            # If the current token is a subword that does not start with "##",
-            # it is the start of a new word, and we should move to the next label
             if not token.startswith("##"):
                 if label_index < len(labels):
                     aligned_labels[i] = labels[label_index]
                     label_index += 1
             else:
-                # For subtokens (that start with "##"), use the same label as the previous token
                 if label_index < len(labels):
                     aligned_labels[i] = labels[label_index - 1]
         
