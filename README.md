@@ -101,7 +101,7 @@ Contributions are welcome! Please open an issue or submit a pull request on the 
 
 ## License
 
-[Insert license information here, if available]
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Contact
 
