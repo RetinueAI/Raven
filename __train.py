@@ -17,7 +17,8 @@ from __raven import Raven
 """
 Model Training Script
 
-This script trains the Raven model on the Raven Dataset. It loads the dataset, splits it into training and test sets, and trains the model using the AdamW optimizer with a learning rate scheduler. The training process uses mixed precision for better performance on GPU. The model is validated after each epoch, and the best model based on validation loss is saved. Training stops early if the validation loss does not improve for 9 consecutive epochs.
+This script trains the Raven model on the Raven Dataset. It loads the dataset, splits it into training and test sets, and trains the model using the AdamW optimizer with a learning rate scheduler. 
+The training process uses mixed precision for better performance on GPU. The model is validated after each epoch, and the best model based on validation loss is saved. Training stops early if the validation loss does not improve for 9 consecutive epochs.
 
 The script also logs training and validation metrics (e.g., loss, learning rate) to Weights & Biases for monitoring and visualization.
 
