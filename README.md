@@ -2,7 +2,7 @@
 
 ## Description
 
-Raven is a deep learning model designed for token-level classification tasks in natural language processing (NLP). It leverages the power of pre-trained BERT models combined with additional neural network layers to classify each token in a given text into one of several predefined classes. The model is particularly suited for tasks requiring fine-grained analysis of text, such as named entity recognition, part-of-speech tagging, or segment classification.
+Raven is a deep learning model designed for token-level classification tasks in natural language processing (NLP). It leverages pre-trained BERT models combined with additional neural network layers to classify each token in a given text into one of several predefined classes. The model is particularly suited for tasks requiring fine-grained analysis of text, such as named entity recognition, part-of-speech tagging, or segment classification. The model is specifically created as a part a deciding the next steps for our AI agent Mimir.
 
 ## Dataset
 
@@ -36,6 +36,7 @@ Training is performed using the following setup:
 - **Loss Function**: CrossEntropyLoss
 
 Mixed precision training is used for better performance on GPU-enabled systems. The dataset is split into 90% training and 10% testing.
+Due to our limited amout of data, we opted to forego  a eval set. As this is not best practice, we will incorporate an eval set when we're able to further expand the dataset.
 
 To train the model, run:
 
