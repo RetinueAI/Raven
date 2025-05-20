@@ -3,6 +3,26 @@ from random import sample
 
 import pandas as pd
 
+
+"""
+Dataset Generation Script
+
+This script generates the Raven Dataset from multiple CSV files located in the './data' directory. It processes the text data, assigns labels, splits sentences, and creates a balanced dataset with paired sentences from different labels. The final dataset is saved as '__raven.csv'.
+
+The script performs the following steps:
+1. Loads CSV files (e.g., 'Raven Dataset Label 0.csv') and ensures each sentence ends with '.' or '?'.
+2. Assigns labels based on file indices (e.g., indices 5-7 map to label 5, indices 8-15 map to `index - 2`, otherwise label matches index).
+3. Concatenates all data into a single DataFrame.
+4. Cleans sentences by splitting and recombining at punctuation marks.
+5. Balances the dataset by sampling an equal number of sentences per label.
+6. Creates paired sentences from different labels to capture transitions or continuations.
+7. Splits each paired sentence into words and assigns corresponding labels.
+8. Validates that the number of words matches the number of labels.
+9. Saves the final dataset to '__raven.csv'.
+
+Run this script to generate the dataset before training the model.
+"""
+
 dfs = []
 
 for i in range(len(os.listdir('./data'))):
