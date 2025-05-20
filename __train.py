@@ -14,6 +14,23 @@ from __raven import Raven
 
 
 
+"""
+Model Training Script
+
+This script trains the Raven model on the Raven Dataset. It loads the dataset, splits it into training and test sets, and trains the model using the AdamW optimizer with a learning rate scheduler. The training process uses mixed precision for better performance on GPU. The model is validated after each epoch, and the best model based on validation loss is saved. Training stops early if the validation loss does not improve for 9 consecutive epochs.
+
+The script also logs training and validation metrics (e.g., loss, learning rate) to Weights & Biases for monitoring and visualization.
+
+Key Hyperparameters:
+- Batch Size: 4
+- Learning Rate: 3e-7
+- Epochs: Up to 100 (with early stopping)
+- Max Sequence Length: 512
+- Dropout Rate: 0.2
+- Split Ratio: 90% training, 10% testing
+
+Run this script to train the model after generating the dataset.
+"""
 with open('config.txt', 'r') as f:
     n_classes = int(f.readlines()[1])
 
