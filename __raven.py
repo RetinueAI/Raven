@@ -5,6 +5,28 @@ from torch.nn import TransformerEncoderLayer, TransformerEncoder
 import torch.nn.functional as F
 
 
+
+"""
+Raven Model Module
+
+This module defines the `Raven` model, a deep learning architecture for token classification tasks. The model combines a pre-trained BERT model (`bert-base-multilingual-cased`) with additional layers, including Conv1d, LSTM, and Transformer Encoder, to process and classify input sequences.
+
+The model is designed for tasks such as named entity recognition, part-of-speech tagging, or segment classification, where each token in the input sequence needs to be assigned a label.
+
+Classes:
+    Raven: A PyTorch nn.Module that implements the Raven model architecture.
+
+Model Architecture:
+- **BERT**: Provides contextual token embeddings.
+- **Conv1d**: Extracts local features from BERT embeddings.
+- **LSTM**: Captures sequential dependencies.
+- **Transformer Encoder**: Uses self-attention for advanced sequence modeling.
+- **Classifier**: A linear layer mapping to `n_classes` (default: 5) for token classification.
+
+Usage:
+- Initialize with `bert_model`, `n_classes`, and `dropout_rate`.
+- Use the `forward` method to process input_ids, attention_mask, and token_type_ids.
+"""
 class Raven(nn.Module):
     def __init__(self, bert_model='bert-base-multilingual-cased', n_classes=5, dropout_rate=0.5):
         super(Raven, self).__init__()
@@ -26,7 +48,6 @@ class Raven(nn.Module):
         lstm_output, _ = self.lstm(conv_output)
         transformer_output = self.transformer_encoder(lstm_output)
 
-        # Apply the classifier to each token in the sequence
-        token_labels_logits = self.segment_classifier(transformer_output)  # Renamed for clarity
+        token_labels_logits = self.segment_classifier(transformer_output)
 
         return token_labels_logits
